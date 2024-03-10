@@ -24,7 +24,7 @@ export const environment: Environment = {
     logging,
     schema,
     autoLoadEntities: true,
-    synchronize: false,
+    synchronize: true,
     entities: [FileEntity, RunEntity, TaskEntity],
   },
   multer: {

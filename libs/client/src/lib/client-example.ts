@@ -17,6 +17,13 @@ import { v4 as uuid } from 'uuid';
 import Debug from 'debug';
 import { readJsonFile } from '@nx/devkit';
 import { unlinkSync } from 'fs';
+import { createTaskGraph } from 'nx/src/tasks-runner/create-task-graph';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import * as graph from './graph.json';
+import { readNxJson } from 'nx/src/config/configuration';
+// import {readNxJson} from "nx/src/config/configuration";
+
 const debug = Debug('tskmgr:client-example');
 
 delete process.env.TS_NODE_PROJECT;
@@ -34,6 +41,22 @@ let run: Run;
 
 (async () => {
   try {
+    // const projects = [
+    //   "api",
+    //   "client",
+    //   "common",
+    //   "frontend",
+    //   "frontend-e2e",
+    //   "db"
+    // ];
+    // const targets = ['build']
+    // const nxJson = readNxJson();
+    // const targetDependencies = {};
+    // Object.keys(nxJson.targetDefaults ?? {}).forEach((k) => {
+    //   targetDependencies[k] = nxJson.targetDefaults[k].dependsOn;
+    // });
+    // const taskGraph = createTaskGraph(graph, targetDependencies, projects, targets, undefined, {});
+    // console.log('taskGraph', taskGraph)
     // 1. Create the new run
     run = await client.createRun({
       name: uuid(),
@@ -47,10 +70,16 @@ let run: Run;
     if (election.leader) {
       const tasks = getNxTasks().map<CreateTaskDto>((nxTask) => {
         const command = `npx nx run ${nxTask.target.project}:${nxTask.target.target} --configuration=production`;
+        const dependsOn =
+          nxTask.target.project === 'frontend' && nxTask.target.target === 'build'
+            ? [{ project: 'common', target: 'build' }]
+            : undefined;
+        console.log('Depends On : ', dependsOn);
         return {
           name: nxTask.target.project,
           type: nxTask.target.target,
           command: command.trim(),
+          dependsOn: dependsOn,
           options: { shell: true },
           priority: TaskPriority.Longest,
         };
