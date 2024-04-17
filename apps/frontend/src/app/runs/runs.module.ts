@@ -17,6 +17,7 @@ import { FilesCellRendererComponent } from './cell-renderers/files-cell-renderer
 import { RunStatusComponent } from './run-status/run-status.component';
 import { RunDetailsExecutionComponent } from './run-details/run-details-execution.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RunDetailsTaskLogComponent } from './run-details/run-details-task-log.component';
 
 const CELL_RENDERERS = [
   RunIdCellRendererComponent,
@@ -35,6 +36,7 @@ const CELL_RENDERERS = [
     RunDetailsFilesComponent,
     RunStatusComponent,
     RunDetailsExecutionComponent,
+    RunDetailsTaskLogComponent,
   ],
   imports: [
     CommonModule, //
