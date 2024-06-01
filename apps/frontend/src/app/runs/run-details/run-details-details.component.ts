@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 @Component({
   template: `
     <div class="d-flex flex-column w-100 m-3">
+      <br />
       <div class="accordion" id="accordionRunDetails">
         <!-- DETAILS -->
         <div class="accordion-item">
